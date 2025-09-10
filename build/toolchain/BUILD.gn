@@ -1,0 +1,55 @@
+# --- TOOLCHAIN DEFINITION FOR LINUX (GCC) ---
+toolchain("gcc_linux_toolchain") {
+  # Defines the command for compiling C files.
+  tool("cc") {
+    command = "gcc -MMD -MF {{output}}.d {{defines}} {{include_dirs}} {{cflags}} {{cflags_c}} -c {{source}} -o {{output}}"
+    depfile = "{{output}}.d"
+    description = "CC {{output}}"
+    outputs = [ "{{source_out_dir}}/{{target_output_name}}.{{source_name_part}}.o" ]
+  }
+  
+  # Defines the command for compiling C++ files.
+  tool("cxx") {
+    command = "g++ -MMD -MF {{output}}.d {{defines}} {{include_dirs}} {{cflags}} {{cflags_cc}} -c {{source}} -o {{output}}"
+    depfile = "{{output}}.d"
+    description = "CXX {{output}}"
+    outputs = [ "{{source_out_dir}}/{{target_output_name}}.{{source_name_part}}.o" ]
+  }
+  
+  # Defines the command for creating static libraries.
+  tool("alink") {
+    command = "ar rcs {{output}} {{inputs}}"
+    description = "AR {{output}}"
+    outputs = [ "{{target_out_dir}}/{{target_output_name}}{{output_extension}}" ]
+    default_output_extension = ".a"
+    output_prefix = "lib"
+  }
+  
+  # Defines the command for creating shared libraries.
+  tool("solink") {
+    command = "g++ -shared -o {{output}} {{inputs}} {{ldflags}} {{libs}}"
+    description = "SOLINK {{output}}"
+    outputs = [ "{{target_out_dir}}/{{target_output_name}}{{output_extension}}" ]
+    default_output_extension = ".so"
+    output_prefix = "lib"
+  }
+  
+  # Defines the command for linking executables.
+  tool("link") {
+    command = "g++ -o {{output}} {{inputs}} {{ldflags}} {{libs}} -lstdc++fs"
+    description = "LINK {{output}}"
+    outputs = [ "{{target_out_dir}}/{{target_output_name}}{{output_extension}}" ]
+    default_output_extension = ""
+  }
+  
+  # Defines tool dependencies.
+  tool("stamp") {
+    command = "touch {{output}}"
+    description = "STAMP {{output}}"
+  }
+  
+  tool("copy") {
+    command = "cp -af {{source}} {{output}}"
+    description = "COPY {{source}} {{output}}"
+  }
+}
