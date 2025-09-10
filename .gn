@@ -1,0 +1,3 @@
+# Root configuration file for GN.
+# It points to the main build configuration file.
+buildconfig = "//build/BUILD.gn"
