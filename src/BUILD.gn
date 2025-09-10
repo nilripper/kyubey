@@ -1,0 +1,41 @@
+# Defines a configuration for the OpenCV dependency.
+config("opencv_config") {
+  include_dirs = [ "/usr/include/opencv4" ]
+  libs = [
+    "opencv_core",
+    "opencv_imgcodecs", 
+    "opencv_imgproc",
+    "opencv_quality",
+  ]
+
+  # Adds common compiler flags.
+  cflags_cc = [
+    # Enables C++17 standard features.
+    "-std=c++17",
+  ]
+  cflags = [
+    # Generates position-independent code, required for shared libraries.
+    "-fPIC",
+  ]
+}
+
+# Defines the main executable target for the project.
+executable("kyubey") {
+  sources = [ "main.cpp" ]
+  
+  # Applies the OpenCV configuration.
+  configs = [ ":opencv_config" ]
+  
+  # Includes directories for cxxopts.
+  include_dirs = [
+    "//third_party/cxxopts/include",
+  ]
+  
+  # Specifies additional libraries needed.
+  libs = [ "stdc++fs" ]
+}
+
+# Defines the default group.
+group("default") {
+  deps = [ ":kyubey" ]
+}
