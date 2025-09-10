@@ -1,0 +1,10 @@
+# This is the root build file for the project. It defines the default
+# target that ninja will build when run without arguments.
+
+group("default") {
+  # This tells GN that the "default" target for the whole project
+  # depends on the "default" target defined inside the src/ directory.
+  deps = [
+    "//src:default",
+  ]
+}
